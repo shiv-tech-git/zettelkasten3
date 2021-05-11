@@ -1,0 +1,28 @@
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  border: 1px solid black;
+  padding: 10px 0;
+}
+
+.search-form {
+  width: 50%;
+  justify-content: center;
+}
+
+#search-input {
+  width: calc(100% - 125px);
+  font-size: 1.5em;
+  height: 40px;
+}
+
+#search-button {
+  font-size: 25px;
+  width: 120px;
+  height: 43px;
+}
+
+#search-button:hover {
+  cursor: pointer;
+  background-color: #A66D00;
+}

@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  height: 100vh;
+}
+
+.sidebar-wrapper {
+  background-color: #FFA700;
+  width: 300px;
+}
+
+.content-wrapper {
+  height: 100vh;
+  background-color: #FFBD40;
+  width: calc(100% - 300px);
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper .content {
+  flex-grow: 1;
+  overflow-y: scroll;
+  border: 1px solid black;
+  padding-bottom: 15%;
+}

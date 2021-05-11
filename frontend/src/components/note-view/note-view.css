@@ -1,0 +1,22 @@
+.note-view-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.note_view {
+  width: 50%;
+}
+
+.note_view h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.note_view .tags, .links {
+  display: flex;
+  padding: 10px 0;
+}
+
+.note_view .body {
+  padding: 20px;
+}

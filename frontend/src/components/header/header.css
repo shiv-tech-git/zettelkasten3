@@ -1,0 +1,39 @@
+.main_header {
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid black;
+  padding: 10px 0;
+}
+
+.main_header .label {
+  padding: 0 30px;
+  font-size: 40px;
+}
+
+.user_block {
+  display: flex;
+  flex-direction: row;
+  padding: 0 30px;
+  align-items: center;
+}
+
+.user_block p {
+  font-size: 25px;
+  padding: 0 20px;
+}
+
+.user_block button {
+  flex-grow: 1;
+  height: 40px;
+  padding: 5px;
+  font-size: 1.5rem;
+}
+
+.user_block button:hover {
+  background-color: #A66D00;
+  cursor: pointer;
+}

@@ -1,0 +1,34 @@
+.link_item_wrapper {
+  border: 1px solid black;
+  margin: 0 5px;
+}
+
+.link_item_link {
+  height: 100%;
+  padding: 5px;
+}
+
+.link_item_link:hover {
+ background-color: #A66D00;
+ cursor: pointer;
+}
+
+.link_item_delete {
+  display: flex;
+}
+
+.link_item_delete .del_btn {
+  padding: 0 5px;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+}
+
+.link_item_delete .del_btn:hover {
+  background-color: #A66D00;
+  cursor: pointer;
+}
+
+.link_item_delete .name {
+  padding: 5px 5px;
+}

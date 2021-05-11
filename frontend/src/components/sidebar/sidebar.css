@@ -1,0 +1,31 @@
+.sidebar {
+  border: 1px solid black;
+  margin: 10px;
+  font-size: 20px;
+}
+
+.logo {
+  font-size: 200px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.sidebar nav {
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .btn {
+  color: black;
+  text-decoration: none;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 5px;
+}
+
+.sidebar .btn:hover {
+  background-color: #A66D00;
+  cursor: pointer;
+}
