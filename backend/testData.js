@@ -33,8 +33,14 @@ const getNoteHeads = (uid) => {
   let heads = [];
   for (i = 0; i < number; i++) {
     heads.push({
-      title: note.title + i,
-      tabs: note.tags
+      note: {
+        title: note.title + i,
+        id: i
+      },
+      tag: {
+        name: note.tags,
+        id: i
+      } 
     })
   }
   return heads;

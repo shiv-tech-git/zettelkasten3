@@ -1,4 +1,4 @@
-import './create-note.css';
+import './note-create.css';
 
 import NoteForm from '../note-form/NoteForm';
 

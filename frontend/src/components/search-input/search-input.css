@@ -1,0 +1,14 @@
+.search-input {
+  position: relative;
+}
+
+.autocomplete_wrapper {
+  background-color: white;
+  border: 1px solid black;
+  position: absolute;
+  z-index: 99;
+  display: inline-block;
+  top: 100%;
+  left: 0;
+  right: 0;
+}

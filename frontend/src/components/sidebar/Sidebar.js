@@ -10,7 +10,7 @@ export default () => {
           Z
         </div>
         <nav>
-          <Link to="/create-note" className="btn">Create note</Link>
+          <Link to="/note-create" className="btn">Create note</Link>
           <Link to="/" className="btn">My notes</Link>
           <Link to="/" className="btn">My tags</Link>
           <Link to="/" className="btn">People</Link>

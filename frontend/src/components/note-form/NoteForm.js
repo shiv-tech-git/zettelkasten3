@@ -1,8 +1,11 @@
 import './note-form.css'
 
 import LinkItem from '../linkItem/LinkItem';
+import SearchInput from '../search-input/SearchInput';
 
-import { useState } from 'react';
+import { fetchNoteHeads } from '../../utils/request';
+
+import { useEffect, useState } from 'react';
 
 const NoteForm = ({note, button_label}) => {
 
@@ -10,14 +13,9 @@ const NoteForm = ({note, button_label}) => {
   const [body, setBody] = useState(note ? note.body : '');
   const [tags, setTags] = useState(note ? note.tags : []);
   const [links, setLinks] = useState(note ? note.links : []);
+  const [allTitles, setAllTitles] = useState([]);
+  const [allTags, setAllTags] = useState([]);
 
-  const titleHandler = (e) => {
-    setTitle(e.target.value)
-  }
-
-  const bodyHandler = (e) => {
-    setBody(e.target.value)
-  }
 
   const deleteTag = (id) => {
     setTags(tags.filter((tag) => {
@@ -31,6 +29,25 @@ const NoteForm = ({note, button_label}) => {
     }))
   }
 
+  const loadTitles = async () => {
+    const heads = await fetchNoteHeads();
+    const titles = heads.map(head => {
+      return {
+        name: head.note.title,
+        id: head.note.id
+      }
+    });
+    setAllTitles(titles)
+  }
+
+  const loadTags = () => {
+
+  }
+
+  useEffect(() => {
+    loadTitles();
+  }, [])
+
   return (
     <div className="note_form_wrapper">
       <div className="note_form">
@@ -39,7 +56,7 @@ const NoteForm = ({note, button_label}) => {
         </div>
         <form>
           <label htmlFor="title">Title</label>
-          <input onChange={titleHandler} type="text" id="title" name="title" value={title}/>
+          <input onChange={e => setTitle(e.target.value)} type="text" id="title" name="title" value={title}/>
           
           <div className="link_items_wrapper">
             <label htmlFor="tags">Tags:</label>
@@ -54,7 +71,9 @@ const NoteForm = ({note, button_label}) => {
                 />
               }) : ''}
           </div>
-          <input type="text" id="tags" />
+          <SearchInput 
+            autocomplete_list={allTitles}
+          />
 
           <div className="link_items_wrapper">
             <label htmlFor="links">Links:</label>
@@ -69,10 +88,12 @@ const NoteForm = ({note, button_label}) => {
                 />
               }) : ''}
           </div>
-          <input type="text" id="links" />
+          <SearchInput 
+            autocomplete_list={allTitles}
+          />
           
           <label htmlFor="body">Body</label>
-          <textarea onChange={bodyHandler} id="body" value={body}></textarea>
+          <textarea onChange={e => setBody(e.target.value)} id="body" value={body}></textarea>
 
 
           <button type="submit" type="submit">{button_label}</button>
