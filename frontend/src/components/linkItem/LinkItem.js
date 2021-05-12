@@ -2,10 +2,8 @@ import './link-item.css';
 
 import { Link } from 'react-router-dom';
 
-const LinkItem = ({ id, name, edit, type }) => {
+const LinkItem = ({ id, name, edit=false, type, button_callback }) => {
   
-  edit = false;
-
   let link = '';
   switch(type) {
     case 'tag':
@@ -23,7 +21,7 @@ const LinkItem = ({ id, name, edit, type }) => {
       <div className="link_item_wrapper">
         <div className="link_item_delete">
           <div className="name">{name}</div>
-          { edit ? <div className="del_btn">X</div> : ''} 
+          { edit ? <div onClick={() => button_callback(id)} className="del_btn">X</div> : ''} 
         </div>
       </div>
   )

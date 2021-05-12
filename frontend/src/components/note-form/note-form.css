@@ -1,0 +1,53 @@
+.note_form_wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+
+.note_form {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  align-items: center;
+  padding: 40px
+}
+
+.note_form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.note_form input {
+  width: 800px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.note_form .form_title {
+  font-size: 2rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.note_form label {
+  font-size: 1.5rem;
+}
+
+.note_form .link_items_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.note_form textarea {
+  margin-bottom: 20px;
+  height: 500px;
+  font-size: 1.5rem;
+}
+
+.note_form button {
+  font-size: 2rem;
+  margin-bottom: 50px;
+}
+
+

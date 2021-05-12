@@ -12,6 +12,7 @@ import Auth from './components/auth/Auth';
 import Header from './components/header/Header';
 import Search from './components/search/Search';
 import NoteView from './components/note-view/NoteView';
+import NoteEdit from './components/note-edit/NoteEdit';
 import TagView from './components/tag-view/TagView';
 //COMPONENTS
 
@@ -47,6 +48,7 @@ function App() {
               <Route path='/' exact component={NoteList}/>
               <Route path='/create-note' component={CreateNote} />
               <Route path='/note-view/:id' component={NoteView} />
+              <Route path='/note-edit/:id' component={NoteEdit} />
               <Route path='/tag-view/:id' component={TagView} />
             </Switch>
           </div>

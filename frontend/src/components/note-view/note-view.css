@@ -20,3 +20,17 @@
 .note_view .body {
   padding: 20px;
 }
+
+.note_view h3 {
+  font-size: 1.5rem;
+}
+
+.note_view .edit_button {
+  font-size: 2rem;
+  padding: 0 20px;
+  border: 1px solid black;
+}
+
+.note_view .edit_button:hover {
+  background-color: #A66D00;
+}
