@@ -3,9 +3,9 @@ import './note-form.css'
 import LinkItem from '../linkItem/LinkItem';
 import SearchInput from '../search-input/SearchInput';
 
-import { fetchNoteHeads } from '../../utils/request';
+import { fetchNoteHeads, fetshAllTags } from '../../utils/request';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const NoteForm = ({note, button_label}) => {
 
@@ -40,14 +40,39 @@ const NoteForm = ({note, button_label}) => {
     setAllTitles(titles)
   }
 
-  const loadTags = () => {
+  const addNewLink = (item) => {
+    setLinks(links => [...links, {id: item.id, title: item.label}]);
+  };
 
+  const loadTags = async () => {
+    const tags = await fetshAllTags();
+    setAllTags(tags);
   }
+
+  const addNewTag = (item) => {
+    setTags(tag => [...tag, {id: item.id, name: item.label}]);
+  };
 
   useEffect(() => {
     loadTitles();
+    loadTags();
   }, [])
 
+  const filterAutocompleteList = (autocomplete_list, selected_list) => {
+    return autocomplete_list.filter((autocomplete_item) => {
+      let leave_element = true;
+
+      const selected_list_length = selected_list.length;
+      for (let i = 0; i < selected_list_length; i++) {
+        if (autocomplete_item.id == selected_list[i].id) {
+          leave_element = false;
+          break;
+        }
+      }
+      return leave_element;
+    })
+  }
+  
   return (
     <div className="note_form_wrapper">
       <div className="note_form">
@@ -60,36 +85,38 @@ const NoteForm = ({note, button_label}) => {
           
           <div className="link_items_wrapper">
             <label htmlFor="tags">Tags:</label>
-              {note ? tags.map((tag) => {
+              {tags.map((tag, index) => {
                 return <LinkItem 
-                  key={tag.id}
+                  key={"tag_" + index}
                   id={tag.id}
                   name={tag.name}
                   edit={true}
                   type='tag'
                   button_callback={deleteTag}
                 />
-              }) : ''}
+              })}
           </div>
           <SearchInput 
-            autocomplete_list={allTitles}
+            autocomplete_list={filterAutocompleteList(allTags, tags)}
+            selectCallback={addNewTag}
           />
 
           <div className="link_items_wrapper">
             <label htmlFor="links">Links:</label>
-              { note ? links.map((note) => {
+              {links.map((note, index) => {
                 return <LinkItem 
-                  key={note.id}
+                  key={"link_" + index}
                   id={note.id}
                   name={note.title}
                   edit={true}
                   type='note'
                   button_callback={deleteLink}
                 />
-              }) : ''}
+              })}
           </div>
           <SearchInput 
-            autocomplete_list={allTitles}
+            autocomplete_list={filterAutocompleteList(allTitles, links)}
+            selectCallback={addNewLink}
           />
           
           <label htmlFor="body">Body</label>

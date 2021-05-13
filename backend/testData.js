@@ -46,6 +46,18 @@ const getNoteHeads = (uid) => {
   return heads;
 }
 
+const getAllTags = () => {
+  let number = 10;
+  let tags = []
+  for (i = 0; i < number; i++) {
+    tags.push({
+        name: 'tag_' + i,
+        id: i
+      })
+  }
+  return tags;
+}
+
 const getNote = (noteId) => {
   return {
     ...note, 
@@ -58,5 +70,6 @@ const getNote = (noteId) => {
 module.exports = {
   getFullNotes,
   getNoteHeads,
-  getNote
+  getNote,
+  getAllTags
 }

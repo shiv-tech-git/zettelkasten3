@@ -77,3 +77,17 @@ export const fetchNoteHeads = async () => {
   })
   return await response.json();
 }
+
+export const fetshAllTags = async () => {
+  const response = await fetch(host_name + '/tags', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      
+    })
+  })
+  return await response.json();
+}

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require("cors");
 const body_parser = require("body-parser");
 
-const { getFullNotes, getNoteHeads, getNote } = require('./testData');
+const { getFullNotes, getNoteHeads, getNote, getAllTags } = require('./testData');
 
 
 const app = express();
@@ -36,6 +36,12 @@ app.post('/heads', (req, res) => {
 app.post('/get-note', (req, res) => {
   res.json(getNote(req.body.nid))
 })
+
+app.post('/tags', (req, res) => {
+  res.json(getAllTags())
+})
+
+
 
 
 app.listen(4000, () => console.log('API is running on port 4000'));
