@@ -1,14 +1,21 @@
 const express = require('express');
 const cors = require("cors");
 const body_parser = require("body-parser");
+const session = require('express-session');
 
 const { getFullNotes, getNoteHeads, getNote, getAllTags } = require('./testData');
+
+const {
+  PORT = 4000,
+  SESS_LIFETIME = TWO_HOURS
+}
 
 
 const app = express();
 app.use(cors())
 
 app.use(express.json());
+
 
 app.post('/login', (req, res) => {
   res.json({
