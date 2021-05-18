@@ -35,7 +35,7 @@ export const registerRequest = async (username, email, passwd) => {
   return await response.json();
 }
 
-export const fetchUserNotes = async (uid, numberOfNotes) => {
+export const fetchNotes = async (uid, numberOfNotes) => {
   const response = await fetch(host_name + '/notes', {
     method: 'POST',
     cache: 'no-cache',
@@ -53,16 +53,13 @@ export const fetchUserNotes = async (uid, numberOfNotes) => {
 
 
 export const fetchNote = async (nid) => {
-  const response = await fetch(host_name + '/get-note', {
-    method: 'POST',
+  const response = await fetch(`${host_name}/note?nid=${nid}`, {
+    method: 'GET',
     cache: 'no-cache',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      nid
-    })
   })
   return await response.json();
 }

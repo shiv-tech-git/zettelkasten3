@@ -5,16 +5,16 @@ import SearchInput from '../search-input/SearchInput';
 
 import { fetchNoteHeads, fetchAllTags, postNote } from '../../utils/request';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
-const NoteForm = ({note, formMode}) => {
-
+const NoteForm = ({note, formMode, submitCallback}) => {
   const [title, setTitle] = useState(note ? note.title : '');
   const [body, setBody] = useState(note ? note.body : '');
   const [tags, setTags] = useState(note ? note.tags : []);
   const [links, setLinks] = useState(note ? note.links : []);
   const [allTitles, setAllTitles] = useState([]);
   const [allTags, setAllTags] = useState([]);
+
 
 
   const deleteTag = (id) => {
@@ -75,19 +75,13 @@ const NoteForm = ({note, formMode}) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const newNote = {
-      action: formMode,
-      note: {
-        id: formMode === 'update' ? note.id : 'new',
-        title,
-        body,
-        tags,
-        links
-      }
+    const note = {
+      title,
+      body,
+      tags,
+      links
     }
-    console.log(newNote)
-    const result = await postNote(newNote);
-    console.log('create response', result)
+    submitCallback(note);
   }
   
   return (

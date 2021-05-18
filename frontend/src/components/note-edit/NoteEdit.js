@@ -5,9 +5,9 @@ import NoteForm from '../note-form/NoteForm';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { fetchNote } from '../../utils/request';
+import { fetchNote, postNote } from '../../utils/request';
 
-const NoteEdit = ({ match }) => {
+const NoteEdit = ({ match, history}) => {
   const [note, setNote] = useState(useSelector(state => state.notes[match.params.id]));
 
   const loadNote = async (nid) => {
@@ -15,16 +15,28 @@ const NoteEdit = ({ match }) => {
     setNote(note);
   }
 
-  if (note === undefined || note.id !== match.params.id) {
+  if (note === undefined || note._id !== match.params.id) {
     loadNote(match.params.id);
     return '';
   }
 
+  const submitCallback = async (updated_note) => {
+    const request_body = {
+      action: 'update',
+      note: {
+        _id: note._id,
+        ...updated_note
+      }
+    }
+    const { _id } = await postNote(request_body);
+    history.push(`/note-view/${_id}`);
+  }
+
   return (
     <NoteForm 
-      title={note.title}
       formMode="update"
       note={note}
+      submitCallback={submitCallback}
     />
   );
 }

@@ -15,9 +15,7 @@ router.post('/', async (req, res) => {
 
   
   matched_user = await UserModel.findOne({passwd: req.body.passwd})
-  console.log('passwd', matched_user)
   if (matched_user && matched_user.passwd === req.body.passwd) {
-    console.log('same pass')
     res.json({
       status: 'error', 
       message: `User with this email ${req.body.email} is already exists`

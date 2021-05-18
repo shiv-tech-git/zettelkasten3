@@ -16,12 +16,13 @@ const NoteView = ({ match }) => {
     setNote(note);
   }
 
-  if (note === undefined || note.id !== match.params.id) {
+  
+  if (note === undefined || note._id !== match.params.id) {
+    console.log('multiple render')
     loadNote(match.params.id);
-    return '';
+    return "";
   }
 
-  
   return (
     <div className="note-view-wrapper">
       <div className="note_view">
@@ -51,7 +52,7 @@ const NoteView = ({ match }) => {
           })}
         </div>
         <div className="body">{note.body}</div>
-        <Link className='edit_button' to={`/note-edit/${note.id}`}>Edit</Link>
+        <Link className='edit_button' to={`/note-edit/${note._id}`}>Edit</Link>
       </div>
     </div>
     

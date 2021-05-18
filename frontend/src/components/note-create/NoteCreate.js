@@ -2,12 +2,28 @@ import './note-create.css';
 
 import NoteForm from '../note-form/NoteForm';
 
+import { postNote } from '../../utils/request';
 
-export default () => {
+import { useCallback } from 'react';
+
+export default ({ history }) => {
+
+  const submitCallback = async (note) => {
+    const request_body = {
+      action: 'create',
+      note: {
+        ...note
+      }
+    }
+    const { _id } = await postNote(request_body);
+    history.push(`/note-view/${_id}`);
+  }
+
   return (
-    <NoteForm 
-      title={'Create note'}
+    <NoteForm
       formMode="create"
+      history={history}
+      submitCallback={submitCallback}
     />
   )
 }

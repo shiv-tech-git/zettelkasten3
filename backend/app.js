@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const login = require('./routes/login');
 const register = require('./routes/register');
 const note = require('./routes/note');
+const notes = require('./routes/notes');
 
 const { getFullNotes, getNoteHeads, getNote, getAllTags } = require('./testData');
 
@@ -51,12 +52,9 @@ app.use('/register', register);
 
 app.use('/note', note);
 
-app.post('/notes', async (req, res) => {
-  res.json(getFullNotes(req.body.uid, req.body.numberOfNotes))
-})
+app.use('/notes', notes);
 
 app.post('/heads', (req, res) => {
-  console.log(req.session)
   res.json(getNoteHeads(req.body.uid))
 })
 
