@@ -9,7 +9,7 @@
     "nodemon": "^2.0.7"
   },
   "scripts": {
-    "dev": "nodemon --watch ./app.js"
+    "dev": "nodemon ./app.js"
   },
   "name": "backend",
   "version": "1.0.0",

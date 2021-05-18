@@ -3,11 +3,11 @@ import './note-form.css'
 import LinkItem from '../linkItem/LinkItem';
 import SearchInput from '../search-input/SearchInput';
 
-import { fetchNoteHeads, fetshAllTags } from '../../utils/request';
+import { fetchNoteHeads, fetchAllTags, postNote } from '../../utils/request';
 
 import { useEffect, useState, useCallback } from 'react';
 
-const NoteForm = ({note, button_label}) => {
+const NoteForm = ({note, formMode}) => {
 
   const [title, setTitle] = useState(note ? note.title : '');
   const [body, setBody] = useState(note ? note.body : '');
@@ -45,7 +45,7 @@ const NoteForm = ({note, button_label}) => {
   };
 
   const loadTags = async () => {
-    const tags = await fetshAllTags();
+    const tags = await fetchAllTags();
     setAllTags(tags);
   }
 
@@ -72,6 +72,23 @@ const NoteForm = ({note, button_label}) => {
       return leave_element;
     })
   }
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const newNote = {
+      action: formMode,
+      note: {
+        id: formMode === 'update' ? note.id : 'new',
+        title,
+        body,
+        tags,
+        links
+      }
+    }
+    console.log(newNote)
+    const result = await postNote(newNote);
+    console.log('create response', result)
+  }
   
   return (
     <div className="note_form_wrapper">
@@ -79,7 +96,7 @@ const NoteForm = ({note, button_label}) => {
         <div className="form_title">
           {title ? title : "Create note"}
         </div>
-        <form>
+        <form onSubmit={submitHandler}>
           <label htmlFor="title">Title</label>
           <input onChange={e => setTitle(e.target.value)} type="text" id="title" name="title" value={title}/>
           
@@ -99,6 +116,7 @@ const NoteForm = ({note, button_label}) => {
           <SearchInput 
             autocomplete_list={filterAutocompleteList(allTags, tags)}
             selectCallback={addNewTag}
+            addNew={true}
           />
 
           <div className="link_items_wrapper">
@@ -123,7 +141,7 @@ const NoteForm = ({note, button_label}) => {
           <textarea onChange={e => setBody(e.target.value)} id="body" value={body}></textarea>
 
 
-          <button type="submit" type="submit">{button_label}</button>
+          <button type="submit">{formMode === 'update' ? 'Save' : 'Create'}</button>
         </form>
       </div>
     </div>

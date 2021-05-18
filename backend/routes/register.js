@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const UserModel = require('../models/user');
 
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
 
   let matched_user = await UserModel.findOne({username: req.body.username})
   if (matched_user && matched_user.username === req.body.username) {
@@ -30,6 +30,7 @@ router.post('/register', async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     passwd: req.body.passwd,
+    tags: []
   })
 
   new_user.save((err, doc) => {

@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
 
   const user = await UserModel.findOne({
     username: req.body.username,
@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
   })
   
   if (user) {
-    req.session.userId = user._id;
+    req.session.uid = user._id;
 
     res.json({
       status: 'success', 

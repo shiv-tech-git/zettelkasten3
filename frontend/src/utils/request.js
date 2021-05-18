@@ -82,7 +82,7 @@ export const fetchNoteHeads = async () => {
   return await response.json();
 }
 
-export const fetshAllTags = async () => {
+export const fetchAllTags = async () => {
   const response = await fetch(host_name + '/tags', {
     method: 'POST',
     cache: 'no-cache',
@@ -93,6 +93,19 @@ export const fetshAllTags = async () => {
     body: JSON.stringify({
       
     })
+  })
+  return await response.json();
+}
+
+export const postNote = async (newNote) => {
+  const response = await fetch(host_name + '/note', {
+    method: 'POST',
+    cache: 'no-cache',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newNote)
   })
   return await response.json();
 }

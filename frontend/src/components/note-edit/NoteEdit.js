@@ -23,7 +23,7 @@ const NoteEdit = ({ match }) => {
   return (
     <NoteForm 
       title={note.title}
-      button_label="Save"
+      formMode="update"
       note={note}
     />
   );

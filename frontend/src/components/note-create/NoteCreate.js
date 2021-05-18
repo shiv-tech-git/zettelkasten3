@@ -7,7 +7,7 @@ export default () => {
   return (
     <NoteForm 
       title={'Create note'}
-      button_label={'Create'}
+      formMode="create"
     />
   )
 }

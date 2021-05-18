@@ -4,35 +4,48 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 
 import AutocompleteItem from "../autocomplete-item/AutocompleteItem";
 
-const SearchInput = ({ autocomplete_list, selectCallback }) => {
+const SearchInput = ({ autocomplete_list, selectCallback, addNew = false }) => {
   const [focusedElement, setFocusedElement] = useState(-1);
-  const [value, setValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
+  const [newElement, setNewElement] = useState('');
 
   const inputHandler = useCallback((e) => {
-    setValue(e.target.value);
+    setInputValue(e.target.value);
   }, []);
 
   const suggests = useMemo(() => {
     let newSuggests = [];
-
-    if (!value) return newSuggests;
+    
+    if (!inputValue) {
+      setFocusedElement(-1);
+      return newSuggests;
+    } 
 
     autocomplete_list.forEach((item) => {
-      const start_pos = item.name.toLowerCase().indexOf(value.toLowerCase());
+      const start_pos = item.name.toLowerCase().indexOf(inputValue.toLowerCase());
       if (start_pos > -1) {
         newSuggests.push({
           id: item.id,
           string: item.name,
           start: start_pos,
-          end: start_pos + value.length,
+          end: start_pos + inputValue.length,
         });
       }
     });
+    //Only one iteam is left, then focus on it
     if (newSuggests.length === 1) {
       setFocusedElement(0);
     }
+    //If we can add a new autocomplete element - just do it
+    if (addNew && newSuggests.length === 0) {
+      setFocusedElement(0);
+      newSuggests = [{
+        id: 'new',
+        string: inputValue,
+      }]
+    }
     return newSuggests;
-  }, [value]);
+  }, [inputValue]);
 
   const addSelectedElement = () => {
     selectCallback({
@@ -40,7 +53,7 @@ const SearchInput = ({ autocomplete_list, selectCallback }) => {
       label: suggests[focusedElement].string
     });
     setFocusedElement(-1);
-    setValue('');
+    setInputValue('');
   }
 
   const keyHandler = (e) => {
@@ -56,7 +69,9 @@ const SearchInput = ({ autocomplete_list, selectCallback }) => {
         break;
       case "Enter":
         e.preventDefault();
-        addSelectedElement();
+        if (focusedElement >= 0) {
+          addSelectedElement();
+        }
         break;
       case "Tab":
         e.preventDefault();
@@ -80,11 +95,9 @@ const SearchInput = ({ autocomplete_list, selectCallback }) => {
     }
   }, [suggests, focusedElement]);
 
-  
-
   return (
     <div className="search-input">
-      <input onChange={inputHandler} type="text" value={value} />
+      <input onChange={inputHandler} type="text" value={inputValue} />
       {suggests.length > 0 && (
         <div className="autocomplete_wrapper">
           {suggests.map((item, index) => {
