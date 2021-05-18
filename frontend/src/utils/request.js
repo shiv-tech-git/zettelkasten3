@@ -1,15 +1,15 @@
 const host_name = 'http://localhost:4000'
 
-export const loginRequest = async (login, passwd) => {
+export const loginRequest = async (username, passwd) => {
   const response = await fetch(host_name + '/login', {
     method: 'POST', 
     cache: 'no-cache',
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      login,
+      username,
       passwd
     })
   })
@@ -17,15 +17,16 @@ export const loginRequest = async (login, passwd) => {
   return await response.json();
 }
 
-export const registerRequest = async (login, email, passwd) => {
+export const registerRequest = async (username, email, passwd) => {
   const response = await fetch(host_name + '/register', {
     method: 'POST', 
     cache: 'no-cache',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      login,
+      username,
       email,
       passwd
     })
@@ -38,6 +39,7 @@ export const fetchUserNotes = async (uid, numberOfNotes) => {
   const response = await fetch(host_name + '/notes', {
     method: 'POST',
     cache: 'no-cache',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -54,6 +56,7 @@ export const fetchNote = async (nid) => {
   const response = await fetch(host_name + '/get-note', {
     method: 'POST',
     cache: 'no-cache',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -68,6 +71,7 @@ export const fetchNoteHeads = async () => {
   const response = await fetch(host_name + '/heads', {
     method: 'POST',
     cache: 'no-cache',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -82,6 +86,7 @@ export const fetshAllTags = async () => {
   const response = await fetch(host_name + '/tags', {
     method: 'POST',
     cache: 'no-cache',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },

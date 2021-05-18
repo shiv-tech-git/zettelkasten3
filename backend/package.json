@@ -5,14 +5,15 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "jshint": "^2.12.0",
+    "mongoose": "^5.12.9",
     "nodemon": "^2.0.7"
   },
   "scripts": {
-    "dev": "nodemon --watch ./server.js"
+    "dev": "nodemon --watch ./app.js"
   },
   "name": "backend",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "app.js",
   "author": "",
   "license": "ISC",
   "description": "",

@@ -36,14 +36,17 @@ export default () => {
   }
 
   const changeFormState = (state) => {
+    setStatus('');
     switch(state) {
       case 'login':
         setBtnLabel('Login');
         setFormState('login');
+        document.getElementById('userName').focus();
         break;
       case 'register':
         setBtnLabel('Register')
         setFormState('register');
+        document.getElementById('userName').focus();
         break;
       default: 
         break;
@@ -60,16 +63,19 @@ export default () => {
         if (response.status === 'success') {
           delete response.status;
           dispatch(loginUser({...response}));
+        } else if (response.status === 'error') {
+          setStatus(response.message);
         }
         break;
       case 'register':
         response = await registerRequest(userName, email, passwd);
         if (response.status === 'success') {
-          setStatus(<>You have successfully registered as <b>{response.userName}</b></>);
           changeFormState('login');
+          setStatus(response.message);
           setUserName('');
           setPasswd('');
-          document.getElementById('userName').focus();
+        } else if (response.status === 'error') {
+          setStatus(response.message);
         }
         break;
       default: 
@@ -89,7 +95,7 @@ export default () => {
   const emailChange = (e) => {
     setEmail(e.target.value);
   }
-
+  
   return (
     <div className="auth_wrapper">
       <div className="auth_form">
@@ -100,14 +106,14 @@ export default () => {
         </nav>
         <form onSubmit={formSubmit}>
           <label htmlFor="userName">Username</label>
-          <input onChange={userNameChange} id='userName' type="text" value={userName}/>
+          <input onChange={userNameChange} id='userName' type="text" value={userName} required autoComplete="off"/>
           {formState === 'register' ? (<>
             <label htmlFor="email">Email</label>
-            <input onChange={emailChange} type="email" id="email" value={email}></input>
+            <input onChange={emailChange} type="email" id="email" value={email} required />
             </>
           ) : ''}
           <label htmlFor="passwd">Password</label>
-          <input onChange={passwdChange} id='passwd' type="text" value={passwd}/>
+          <input onChange={passwdChange} id='passwd' type="password" value={passwd} required autoComplete="new-password"/>
           <button id='auth_bnt' data-action="login" type='submit'>{btnLabel}</button>
         </form>
       </div>
