@@ -4,7 +4,7 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const { rawListeners } = require('../models/note');
 
-const handleNewTags = (note) => {
+const setIdtoNewTags = (note) => {
   const newTags = [];
 
   note.tags.forEach(async (tag) => {
@@ -22,60 +22,80 @@ const addTagsToUser = async (tags, uid) => {
   tags.forEach((tag) => {
     user.tags.push({_id: tag._id, name: tag.name})
   })
-  user.save();
+  await user.save();
 }
 
-router.post('/', async (req, res) => {
-
-  const note = req.body.note;
-  const action = req.body.action;
-  const uid = req.session.uid;
-
-  // const newTags = [];
-
-  // note.tags.forEach(async (tag) => {
-  //   if (tag._id === 'new') {
-  //     tag._id = new mongoose.Types.ObjectId()
-  //     newTags.push(tag);
-  //   }
-  // })
-  
-  const newTags = handleNewTags(note);
+const handleNewTags = (note, uid) => {
+  const newTags = setIdtoNewTags(note);
 
   if (newTags !== 0) {
     addTagsToUser(newTags, uid);
   }
+}
 
-  // if (newTags.length !== 0) {
-  //   const user = await UserModel.findOne({_id: uid})
-  //   newTags.forEach((tag) => {
-  //     user.tags.push({_id: tag._id, name: tag.name})
-  //   })
-  //   user.save();
-  // }
-  
-  
-  switch (action) {
-    case 'create':
-      const newNote = new NoteModel({
-        uid,
-        ...note
-      })
-      const created_note = await newNote.save();
-      res.json({_id: created_note._id})
-      break;
-    case 'update':
-      const updating_note = await NoteModel.findOne({_id: note._id})
-      updating_note.title = note.title;
-      updating_note.tags = note.tags;
-      updating_note.links = note.links;
-      updating_note.body = note.body;
-      const updated_note = await updating_note.save();
-      res.json({_id: updated_note._id})
-      break;
-  }
+const filterNewLinks = (note) => {
+  const newLinkIds = [];
 
+  note.links.forEach((link) => {
+    if (link.status && link.status === 'new') {
+      newLinkIds.push(link._id);
+      delete link.status
+    }
+  })
+
+  return newLinkIds;
+}
+
+const handleNewLinks = (newLinkIds, newNote) => {
+  newLinkIds.forEach( async (linkId) => {
+    const note = await NoteModel.findOne({_id: linkId});
+    note.links.push({
+      title: newNote.title,
+      _id: newNote._id
+    });
+    note.save();
+  })
+}
+
+router.post('/', async (req, res) => {
+
+  const note = req.body;
+  const uid = req.session.uid;
   
+  handleNewTags(note, uid);
+
+  const newLinkIds = filterNewLinks(note);
+
+  const newNote = new NoteModel({
+    uid,
+    ...note
+  })
+  const createdNote = await newNote.save();
+
+  handleNewLinks(newLinkIds, createdNote);
+
+  res.json({_id: createdNote._id})
+})
+
+router.put('/', async (req, res) => {
+
+  const note = req.body;
+  const uid = req.session.uid;
+  
+  handleNewTags(note, uid);
+
+  const newLinkIds = filterNewLinks(note);
+
+  const updating_note = await NoteModel.findOne({_id: note._id})
+  updating_note.title = note.title;
+  updating_note.tags = note.tags;
+  updating_note.links = note.links;
+  updating_note.body = note.body;
+  const updated_note = await updating_note.save();
+
+  handleNewLinks(newLinkIds, updated_note);
+
+  res.json({_id: updated_note._id})
 })
 
 router.get('/', async (req, res) => {

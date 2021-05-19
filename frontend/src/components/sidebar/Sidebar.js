@@ -17,7 +17,7 @@ const Sidebar = () => {
         <nav>
           <Link to="/note/create" className="btn">Create note</Link>
           <Link to={`/notes/user/${myId}`} className="btn">My notes</Link>
-          <Link to={`/tags/${myId}`} className="btn">My tags</Link>
+          <Link to={`/tags/user/${myId}`} className="btn">My tags</Link>
           <Link to="/" className="btn">People</Link>
         </nav>
       </div>

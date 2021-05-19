@@ -7,14 +7,14 @@ import { useState } from 'react';
 //COMPONENTS
 import NoteCreate from './components/note-create/NoteCreate';
 import Sidebar from './components/sidebar/Sidebar';
-import NoteList from './components/note-list/NoteList';
 import Auth from './components/auth/Auth';
 import Header from './components/header/Header';
 import Search from './components/search/Search';
 import NoteView from './components/note-view/NoteView';
 import NoteEdit from './components/note-edit/NoteEdit';
-import TagView from './components/tag-view/TagView';
+import UserTags from './components/user-tags/UserTags';
 import UserNotes from './components/user-notes/UserNotes';
+import TagNotes from './components/tag-notes/TagNotes';
 //COMPONENTS
 
 //ROUTER
@@ -46,11 +46,12 @@ function App() {
           <Search/>
           <div className="content">
             <Switch>
-              <Route path='/notes/user/:id' exact component={UserNotes}/>
+              <Route path='/notes/user/:uid' exact component={UserNotes} />
+              <Route path='/notes/tag/:tid' exact component={TagNotes} />
               <Route path='/note/create' component={NoteCreate} />
-              <Route path='/note/view/:id' component={NoteView} />
-              <Route path='/note/edit/:id' component={NoteEdit} />
-              <Route path='/tag/view/:id' component={TagView} />
+              <Route path='/note/view/:nid' component={NoteView} />
+              <Route path='/note/edit/:nid' component={NoteEdit} />
+              <Route path='/tags/user/:uid' component={UserTags} />
             </Switch>
           </div>
         </div>

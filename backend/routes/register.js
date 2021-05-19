@@ -33,7 +33,6 @@ router.post('/', async (req, res) => {
 
   new_user.save((err, doc) => {
     if (err) return console.error(err)
-    console.log("success: ", doc)
   })
   
   res.json({

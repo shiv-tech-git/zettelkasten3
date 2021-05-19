@@ -9,7 +9,7 @@ import { getNote } from '../../utils/request';
 import LinkItem from '../link-item/LinkItem';
 
 const NoteView = ({ match }) => {
-  const [note, setNote] = useState(useSelector(state => state.notes[match.params.id]));
+  const [note, setNote] = useState(useSelector(state => state.notes[match.params.nid]));
 
   const loadNote = async (nid) => {
     const note = await getNote(nid)
@@ -17,9 +17,9 @@ const NoteView = ({ match }) => {
   }
 
   
-  if (note === undefined || note._id !== match.params.id) {
+  if (note === undefined || note._id !== match.params.nid) {
     console.log('multiple render')
-    loadNote(match.params.id);
+    loadNote(match.params.nid);
     return "";
   }
 

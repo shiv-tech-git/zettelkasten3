@@ -20,11 +20,11 @@ const UserNotes = ({match}) => {
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    const responce = await getNotesByUserId(match.params.id);
+    const responce = await getNotesByUserId(match.params.uid);
     console.log(responce)
     dispatch(addNotes(responce.notes));
     setNotes(responce.notes);
-    if (userId === match.params.id) setTitle('My notes')
+    if (userId === match.params.uid) setTitle('My notes')
     else setTitle(`${responce.user.username}`)
   }, [])
   
