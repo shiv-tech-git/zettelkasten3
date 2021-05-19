@@ -1,6 +1,6 @@
 import './search.css'
 
-export default () => {
+const Search = () => {
   return (
     <div className="search-wrapper">
       <form className="search-form">
@@ -10,3 +10,5 @@ export default () => {
     </div>
   )
 }
+
+export default Search;

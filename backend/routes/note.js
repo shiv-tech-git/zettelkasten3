@@ -12,8 +12,8 @@ router.post('/', async (req, res) => {
 
   const newTags = [];
   note.tags.forEach(async (tag) => {
-    if (tag.id === 'new') {
-      tag.id = new mongoose.Types.ObjectId()
+    if (tag._id === 'new') {
+      tag._id = new mongoose.Types.ObjectId()
       newTags.push(tag);
     }
   })

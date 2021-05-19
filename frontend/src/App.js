@@ -14,6 +14,7 @@ import Search from './components/search/Search';
 import NoteView from './components/note-view/NoteView';
 import NoteEdit from './components/note-edit/NoteEdit';
 import TagView from './components/tag-view/TagView';
+import UserNotes from './components/user-notes/UserNotes';
 //COMPONENTS
 
 //ROUTER
@@ -45,11 +46,11 @@ function App() {
           <Search/>
           <div className="content">
             <Switch>
-              <Route path='/' exact component={NoteList}/>
-              <Route path='/note-create' component={NoteCreate} />
-              <Route path='/note-view/:id' component={NoteView} />
-              <Route path='/note-edit/:id' component={NoteEdit} />
-              <Route path='/tag-view/:id' component={TagView} />
+              <Route path='/notes/user/:id' exact component={UserNotes}/>
+              <Route path='/note/create' component={NoteCreate} />
+              <Route path='/note/view/:id' component={NoteView} />
+              <Route path='/note/edit/:id' component={NoteEdit} />
+              <Route path='/tag/view/:id' component={TagView} />
             </Switch>
           </div>
         </div>

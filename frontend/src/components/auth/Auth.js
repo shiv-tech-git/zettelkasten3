@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/actions';
 //REDUX
 
-export default () => {
+const Auth = () => {
 
   //REACT
   const [userName, setUserName] = useState('');
@@ -120,3 +120,5 @@ export default () => {
     </div>
   )
 }
+
+export default Auth;

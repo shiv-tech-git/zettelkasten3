@@ -29,7 +29,7 @@ const NoteEdit = ({ match, history}) => {
       }
     }
     const { _id } = await postNote(request_body);
-    history.push(`/note-view/${_id}`);
+    history.push(`/note/view/${_id}`);
   }
 
   return (

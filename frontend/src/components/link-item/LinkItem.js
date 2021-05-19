@@ -2,15 +2,15 @@ import './link-item.css';
 
 import { Link } from 'react-router-dom';
 
-const LinkItem = ({ id, name, edit=false, type, button_callback }) => {
+const LinkItem = ({ itemId, name, edit=false, type, button_callback }) => {
   
   let link = '';
   switch(type) {
     case 'tag':
-      link = `/tag-view/${id}`
+      link = `/notes/tag/${itemId}`
       break;
     case 'note':
-      link = `/note-view/${id}`
+      link = `/note/view/${itemId}`
       break;
     default:
       break;
@@ -21,7 +21,7 @@ const LinkItem = ({ id, name, edit=false, type, button_callback }) => {
       <div className="link_item_wrapper">
         <div className="link_item_delete">
           <div className="name">{name}</div>
-          { edit ? <div onClick={() => button_callback(id)} className="del_btn">X</div> : ''} 
+          { edit ? <div onClick={() => button_callback(itemId)} className="del_btn">X</div> : ''} 
         </div>
       </div>
   )

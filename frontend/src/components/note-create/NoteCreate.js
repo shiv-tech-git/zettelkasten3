@@ -6,7 +6,7 @@ import { postNote } from '../../utils/request';
 
 import { useCallback } from 'react';
 
-export default ({ history }) => {
+const NoteCreate = ({ history }) => {
 
   const submitCallback = async (note) => {
     const request_body = {
@@ -16,7 +16,7 @@ export default ({ history }) => {
       }
     }
     const { _id } = await postNote(request_body);
-    history.push(`/note-view/${_id}`);
+    history.push(`/note/view/${_id}`);
   }
 
   return (
@@ -27,3 +27,5 @@ export default ({ history }) => {
     />
   )
 }
+
+export default NoteCreate;

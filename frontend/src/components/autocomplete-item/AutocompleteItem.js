@@ -1,7 +1,7 @@
 import './autocomplete-item.css';
 
-const AutocompleteItem = ({id, string, start, end, isActive}) => {
-  if (id === 'new') return (
+const AutocompleteItem = ({_id, string, start, end, isActive}) => {
+  if (_id === 'new') return (
     <div className={`ac_item active`}>
       <p>
         New: {string}

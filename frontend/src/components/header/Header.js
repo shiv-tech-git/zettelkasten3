@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../redux/actions'
 import { useHistory } from 'react-router-dom';
 
-export default () => {
+const Header = () => {
 
   const userName = useSelector(store => store.auth.userData.userName)
   const dispatch = useDispatch();
@@ -27,3 +27,5 @@ export default () => {
     </div>
   )
 }
+
+export default Header;

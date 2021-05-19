@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { fetchNote } from '../../utils/request';
 
-import LinkItem from '../linkItem/LinkItem';
+import LinkItem from '../link-item/LinkItem';
 
 const NoteView = ({ match }) => {
   const [note, setNote] = useState(useSelector(state => state.notes[match.params.id]));
@@ -31,8 +31,8 @@ const NoteView = ({ match }) => {
           <h3>Tags: </h3>
           {note.tags.map((tag) => {
             return <LinkItem
-              key={tag.id}
-              id={tag.id}
+              key={tag._id}
+              itemId={tag._id}
               name={tag.name}
               edit={false}
               type="tag"
@@ -43,8 +43,8 @@ const NoteView = ({ match }) => {
           <h3>Links: </h3>
           {note.links.map((note) => {
             return <LinkItem
-              key={note.id}
-              id={note.id}
+              key={note._id}
+              itemId={note._id}
               name={note.title}
               edit={false}
               type="note"
@@ -52,7 +52,7 @@ const NoteView = ({ match }) => {
           })}
         </div>
         <div className="body">{note.body}</div>
-        <Link className='edit_button' to={`/note-edit/${note._id}`}>Edit</Link>
+        <Link className='edit_button' to={`/note/edit/${note._id}`}>Edit</Link>
       </div>
     </div>
     

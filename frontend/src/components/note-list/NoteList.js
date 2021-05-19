@@ -11,28 +11,11 @@ import { addNotes } from '../../redux/actions';
 import { fetchNotes } from '../../utils/request';
 
 
-export default () => {
-
-  const [noteList, setNoteList] = useState([])
-
-  const userId = useSelector(state => state.auth.userData.userId);
-  const user = useSelector(state => state.auth.userData);
-  const dispatch = useDispatch();
-  
-  const getNoteList = async (numberOfNotes) => {
-    return await fetchNotes(userId, numberOfNotes);
-  }
-
-  useEffect(async () => {
-    let notes = await getNoteList(10);
-    dispatch(addNotes(notes));
-    setNoteList(notes);
-  }, [])
-  
+const NoteList = ({title, notes}) => {
   return (
     <div className="note_list">
-      <h2>My notes</h2>
-      {noteList.map((note, index) => {
+      <h2>{title}</h2>
+      {notes.map((note, index) => {
         return <NoteListElement 
           key={note._id}
           note={note}
@@ -42,3 +25,4 @@ export default () => {
   )
 }
 
+export default NoteList;

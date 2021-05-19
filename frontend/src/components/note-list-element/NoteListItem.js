@@ -7,7 +7,7 @@ const NoteListElement = ({note}) => {
   return (
     <div className="note_list_element">
 
-      <Link to={`/note-view/${note._id}`}>
+      <Link to={`/note/view/${note._id}`}>
         <h3>{note.title}</h3>
         <div className="tags">
           Tags: 

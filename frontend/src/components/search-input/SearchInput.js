@@ -25,7 +25,7 @@ const SearchInput = ({ autocomplete_list, selectCallback, addNew = false }) => {
       const start_pos = item.name.toLowerCase().indexOf(inputValue.toLowerCase());
       if (start_pos > -1) {
         newSuggests.push({
-          id: item.id,
+          _id: item._id,
           string: item.name,
           start: start_pos,
           end: start_pos + inputValue.length,
@@ -40,7 +40,7 @@ const SearchInput = ({ autocomplete_list, selectCallback, addNew = false }) => {
     if (addNew && newSuggests.length === 0) {
       setFocusedElement(0);
       newSuggests = [{
-        id: 'new',
+        _id: 'new',
         string: inputValue,
       }]
     }
@@ -49,7 +49,7 @@ const SearchInput = ({ autocomplete_list, selectCallback, addNew = false }) => {
 
   const addSelectedElement = () => {
     selectCallback({
-      id: suggests[focusedElement].id,
+      _id: suggests[focusedElement]._id,
       label: suggests[focusedElement].string
     });
     setFocusedElement(-1);
@@ -104,7 +104,7 @@ const SearchInput = ({ autocomplete_list, selectCallback, addNew = false }) => {
             return (
               <AutocompleteItem
                 isActive={focusedElement === index}
-                key={item.id}
+                key={item._id}
                 {...item}
               />
             );

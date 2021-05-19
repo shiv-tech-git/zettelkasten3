@@ -35,18 +35,14 @@ export const registerRequest = async (username, email, passwd) => {
   return await response.json();
 }
 
-export const fetchNotes = async (uid, numberOfNotes) => {
-  const response = await fetch(host_name + '/notes', {
-    method: 'POST',
+export const getNotesByUserId = async (uid) => {
+  const response = await fetch(`${host_name}/notes?uid=${uid}`, {
+    method: 'GET',
     cache: 'no-cache',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      uid,
-      numberOfNotes,
-    })
   })
   return await response.json();
 }
@@ -79,17 +75,14 @@ export const fetchNoteHeads = async () => {
   return await response.json();
 }
 
-export const fetchAllTags = async () => {
-  const response = await fetch(host_name + '/tags', {
-    method: 'POST',
+export const getUser = async (userId) => {
+  const response = await fetch(`${host_name}/user?uid=${userId}`, {
+    method: 'GET',
     cache: 'no-cache',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      
-    })
   })
   return await response.json();
 }

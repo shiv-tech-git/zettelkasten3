@@ -4,10 +4,11 @@ const body_parser = require("body-parser");
 const session = require('express-session');
 const mongoose = require('mongoose');
 
-const login = require('./routes/login');
-const register = require('./routes/register');
-const note = require('./routes/note');
-const notes = require('./routes/notes');
+const loginRouter = require('./routes/login');
+const registerRouter = require('./routes/register');
+const noteRouter = require('./routes/note');
+const userRouter = require('./routes/user');
+const notesRouter = require('./routes/notes');
 
 const { getFullNotes, getNoteHeads, getNote, getAllTags } = require('./testData');
 
@@ -46,26 +47,19 @@ app.use(session({
   }
 }))
 
-app.use('/login', login);
+app.use('/login', loginRouter);
 
-app.use('/register', register);
+app.use('/register', registerRouter);
 
-app.use('/note', note);
+app.use('/note', noteRouter);
 
-app.use('/notes', notes);
+app.use('/user', userRouter);
+
+app.use('/notes', notesRouter)
 
 app.post('/heads', (req, res) => {
+  console.log(req.session)
   res.json(getNoteHeads(req.body.uid))
 })
-
-app.post('/get-note', (req, res) => {
-  res.json(getNote(req.body.nid))
-})
-
-app.post('/tags', (req, res) => {
-  res.json(getAllTags())
-})
-
-
 
 app.listen(4000, () => console.log('API is running on port 4000'));

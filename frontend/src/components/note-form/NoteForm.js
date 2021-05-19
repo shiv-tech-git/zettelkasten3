@@ -1,11 +1,12 @@
 import './note-form.css'
 
-import LinkItem from '../linkItem/LinkItem';
+import LinkItem from '../link-item/LinkItem';
 import SearchInput from '../search-input/SearchInput';
 
-import { fetchNoteHeads, fetchAllTags, postNote } from '../../utils/request';
+import { fetchNoteHeads, getUser, postNote } from '../../utils/request';
 
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const NoteForm = ({note, formMode, submitCallback}) => {
   const [title, setTitle] = useState(note ? note.title : '');
@@ -14,6 +15,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
   const [links, setLinks] = useState(note ? note.links : []);
   const [allTitles, setAllTitles] = useState([]);
   const [allTags, setAllTags] = useState([]);
+  const myId = useSelector(state => state.auth.userData.userId)
 
 
 
@@ -45,12 +47,12 @@ const NoteForm = ({note, formMode, submitCallback}) => {
   };
 
   const loadTags = async () => {
-    const tags = await fetchAllTags();
-    setAllTags(tags);
+    const userData = await getUser(myId);
+    setAllTags(userData.tags);
   }
 
   const addNewTag = (item) => {
-    setTags(tag => [...tag, {id: item.id, name: item.label}]);
+    setTags(tag => [...tag, {_id: item._id, name: item.label}]);
   };
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
 
       const selected_list_length = selected_list.length;
       for (let i = 0; i < selected_list_length; i++) {
-        if (autocomplete_item.id == selected_list[i].id) {
+        if (autocomplete_item._id == selected_list[i]._id) {
           leave_element = false;
           break;
         }
@@ -83,7 +85,6 @@ const NoteForm = ({note, formMode, submitCallback}) => {
     }
     submitCallback(note);
   }
-  
   return (
     <div className="note_form_wrapper">
       <div className="note_form">
@@ -97,9 +98,10 @@ const NoteForm = ({note, formMode, submitCallback}) => {
           <div className="link_items_wrapper">
             <label htmlFor="tags">Tags:</label>
               {tags.map((tag, index) => {
+                
                 return <LinkItem 
                   key={"tag_" + index}
-                  id={tag.id}
+                  id={tag._id}
                   name={tag.name}
                   edit={true}
                   type='tag'
