@@ -4,27 +4,55 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const { rawListeners } = require('../models/note');
 
-router.post('/', async (req, res) => {
-
-  const note = req.body.note;
-  const action = req.body.action;
-  const uid = req.session.uid;
-
+const handleNewTags = (note) => {
   const newTags = [];
+
   note.tags.forEach(async (tag) => {
     if (tag._id === 'new') {
       tag._id = new mongoose.Types.ObjectId()
       newTags.push(tag);
     }
   })
+
+  return newTags;
+}
+
+const addTagsToUser = async (tags, uid) => {
+  const user = await UserModel.findOne({_id: uid})
+  tags.forEach((tag) => {
+    user.tags.push({_id: tag._id, name: tag.name})
+  })
+  user.save();
+}
+
+router.post('/', async (req, res) => {
+
+  const note = req.body.note;
+  const action = req.body.action;
+  const uid = req.session.uid;
+
+  // const newTags = [];
+
+  // note.tags.forEach(async (tag) => {
+  //   if (tag._id === 'new') {
+  //     tag._id = new mongoose.Types.ObjectId()
+  //     newTags.push(tag);
+  //   }
+  // })
   
-  if (newTags.length !== 0) {
-    const user = await UserModel.findOne({_id: uid})
-    newTags.forEach((tag) => {
-      user.tags.push({_id: tag.id, name: tag.name})
-    })
-    user.save();
+  const newTags = handleNewTags(note);
+
+  if (newTags !== 0) {
+    addTagsToUser(newTags, uid);
   }
+
+  // if (newTags.length !== 0) {
+  //   const user = await UserModel.findOne({_id: uid})
+  //   newTags.forEach((tag) => {
+  //     user.tags.push({_id: tag._id, name: tag.name})
+  //   })
+  //   user.save();
+  // }
   
   
   switch (action) {

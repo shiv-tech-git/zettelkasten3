@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { fetchNote } from '../../utils/request';
+import { getNote } from '../../utils/request';
 
 import LinkItem from '../link-item/LinkItem';
 
@@ -12,7 +12,7 @@ const NoteView = ({ match }) => {
   const [note, setNote] = useState(useSelector(state => state.notes[match.params.id]));
 
   const loadNote = async (nid) => {
-    const note = await fetchNote(nid)
+    const note = await getNote(nid)
     setNote(note);
   }
 

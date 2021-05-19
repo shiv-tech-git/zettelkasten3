@@ -3,7 +3,7 @@ import './note-form.css'
 import LinkItem from '../link-item/LinkItem';
 import SearchInput from '../search-input/SearchInput';
 
-import { fetchNoteHeads, getUser, postNote } from '../../utils/request';
+import { getNoteHeads, getUser } from '../../utils/request';
 
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,31 +19,32 @@ const NoteForm = ({note, formMode, submitCallback}) => {
 
 
 
-  const deleteTag = (id) => {
+  const deleteTag = (tagId) => {
     setTags(tags.filter((tag) => {
-      return tag.id !== id;
+      return tag._id !== tagId;
     }))
   }
 
-  const deleteLink = (id) => {
+  const deleteLink = (linkId) => {
+    console.log(linkId);
     setLinks(links.filter((link) => {
-      return link.id !== id;
+      return link._id !== linkId;
     }))
   }
 
   const loadTitles = async () => {
-    const heads = await fetchNoteHeads();
+    const heads = await getNoteHeads(myId);
     const titles = heads.map(head => {
       return {
-        name: head.note.title,
-        id: head.note.id
+        name: head.title,
+        _id: head._id
       }
     });
     setAllTitles(titles)
   }
 
   const addNewLink = (item) => {
-    setLinks(links => [...links, {id: item.id, title: item.label}]);
+    setLinks(links => [...links, {_id: item._id, title: item.label, status: 'new'}]);
   };
 
   const loadTags = async () => {
@@ -52,9 +53,18 @@ const NoteForm = ({note, formMode, submitCallback}) => {
   }
 
   const addNewTag = (item) => {
+    if (item._id === 'new') {
+      const tagsLength = tags.length;
+      for (let i = 0; i < tagsLength; i++) {
+        if (tags[i].name === item.label) return;
+      }
+      setTags(tag => [...tag, {_id: `new_${item.label}`, name: item.label}]);
+      return;
+    }
     setTags(tag => [...tag, {_id: item._id, name: item.label}]);
+    console.log('set tag', tags)
   };
-
+  
   useEffect(() => {
     loadTitles();
     loadTags();
@@ -77,6 +87,9 @@ const NoteForm = ({note, formMode, submitCallback}) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    tags.forEach(tag => {
+      if (tag._id.indexOf('new') > -1) tag._id = 'new';
+    })
     const note = {
       title,
       body,
@@ -101,7 +114,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
                 
                 return <LinkItem 
                   key={"tag_" + index}
-                  id={tag._id}
+                  itemId={tag._id}
                   name={tag.name}
                   edit={true}
                   type='tag'
@@ -110,6 +123,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
               })}
           </div>
           <SearchInput 
+            key='tag_input'
             autocomplete_list={filterAutocompleteList(allTags, tags)}
             selectCallback={addNewTag}
             addNew={true}
@@ -120,7 +134,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
               {links.map((note, index) => {
                 return <LinkItem 
                   key={"link_" + index}
-                  id={note.id}
+                  itemId={note._id}
                   name={note.title}
                   edit={true}
                   type='note'
@@ -128,7 +142,8 @@ const NoteForm = ({note, formMode, submitCallback}) => {
                 />
               })}
           </div>
-          <SearchInput 
+          <SearchInput
+            key='link_input' 
             autocomplete_list={filterAutocompleteList(allTitles, links)}
             selectCallback={addNewLink}
           />

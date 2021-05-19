@@ -9,6 +9,7 @@ const registerRouter = require('./routes/register');
 const noteRouter = require('./routes/note');
 const userRouter = require('./routes/user');
 const notesRouter = require('./routes/notes');
+const headsRouter = require('./routes/heads');
 
 const { getFullNotes, getNoteHeads, getNote, getAllTags } = require('./testData');
 
@@ -57,9 +58,6 @@ app.use('/user', userRouter);
 
 app.use('/notes', notesRouter)
 
-app.post('/heads', (req, res) => {
-  console.log(req.session)
-  res.json(getNoteHeads(req.body.uid))
-})
+app.use('/heads', headsRouter)
 
 app.listen(4000, () => console.log('API is running on port 4000'));

@@ -48,7 +48,7 @@ export const getNotesByUserId = async (uid) => {
 }
 
 
-export const fetchNote = async (nid) => {
+export const getNote = async (nid) => {
   const response = await fetch(`${host_name}/note?nid=${nid}`, {
     method: 'GET',
     cache: 'no-cache',
@@ -60,17 +60,14 @@ export const fetchNote = async (nid) => {
   return await response.json();
 }
 
-export const fetchNoteHeads = async () => {
-  const response = await fetch(host_name + '/heads', {
-    method: 'POST',
+export const getNoteHeads = async (uid) => {
+  const response = await fetch(`${host_name}/heads?uid=${uid}`, {
+    method: 'GET',
     cache: 'no-cache',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      
-    })
+    }
   })
   return await response.json();
 }

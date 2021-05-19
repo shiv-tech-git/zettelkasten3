@@ -5,13 +5,13 @@ import NoteForm from '../note-form/NoteForm';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { fetchNote, postNote } from '../../utils/request';
+import { getNote, postNote } from '../../utils/request';
 
 const NoteEdit = ({ match, history}) => {
   const [note, setNote] = useState(useSelector(state => state.notes[match.params.id]));
 
   const loadNote = async (nid) => {
-    const note = await fetchNote(nid)
+    const note = await getNote(nid)
     setNote(note);
   }
 

@@ -36,7 +36,7 @@ const SearchInput = ({ autocomplete_list, selectCallback, addNew = false }) => {
     if (newSuggests.length === 1) {
       setFocusedElement(0);
     }
-    //If we can add a new autocomplete element - just do it
+    //If we can add a new autocomplete element to suggestions  - just do it
     if (addNew && newSuggests.length === 0) {
       setFocusedElement(0);
       newSuggests = [{
