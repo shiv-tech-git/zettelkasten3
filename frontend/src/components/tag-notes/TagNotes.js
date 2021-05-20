@@ -6,35 +6,42 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getNotesByTagId } from '../../utils/request';
 
-
 const TagNotes = ({match}) => {
+  console.log('here')
 
-  console.log(getNotesByTagId(match.params.tid))
+  const [notes, setNotes] = useState(null)
+  const [tagData, setTagData] = useState(null)
+  const myid = useSelector(state => state.auth.userData.userId)
 
-  // const [notes, setNotes] = useState([])
-  // const [title, setTitle] = useState('')
+  const uid = match.params.uid;
+  const tid = match.params.tid;
 
-  // const userId = useSelector(state => state.auth.userData.userId);
-  // const dispatch = useDispatch();
+  useEffect( async () => {
+    const responce = await getNotesByTagId(uid, tid);
+    setNotes(responce.notes);
+    console.log("responce")
+    setTagData({
+      userName: responce.user.username,
+      tagName: responce.tagName,
+    })
+  }, [])
 
-  // useEffect(async () => {
-  //   const responce = await getNotesByUserId(match.params.uid);
-  //   console.log(responce)
-  //   dispatch(addNotes(responce.notes));
-  //   setNotes(responce.notes);
-  //   if (userId === match.params.uid) setTitle('My notes')
-  //   else setTitle(`${responce.user.username}`)
-  // }, [])
-  
-  // if (notes.length === 0) return <></>;
+  if (!notes || !tagData) return '';
 
-  // console.log(notes)
+  console.log(tagData)
+  let title = '';
+  if (myid === uid) {
+    title = `My notes with tag: ${tagData.tagName}`
+  }
+  else {
+    title = `${tagData.username}'s notes with tag: ${tagData.name}`
+  }
+
   return (
-    // <NoteList
-    //   title={title}
-    //   notes={notes}
-    // />
-    <div className="">hello</div>
+    <NoteList
+      title={title}
+      notes={notes}
+    />
   )
 }
 

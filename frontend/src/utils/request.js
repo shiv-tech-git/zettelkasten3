@@ -8,9 +8,8 @@ const get = async (route, params) => {
   paramsString = paramsString.substring(0, paramsString.length - 1);
 
   const requestUrl = host_name + route + paramsString;
-  console.log(requestUrl)
 
-  const response = await fetch((host_name + route + paramsString), {
+  const response = await fetch(requestUrl, {
     method: 'GET',
     cache: 'no-cache',
     credentials: 'include',
@@ -42,39 +41,46 @@ const put = (route, body) => {
   return bodyParamRequest("PUT", route, body)
 }
 
+const del = (route, body) => {
+  return bodyParamRequest("DELETE", route, body);
+}
 
-export const loginRequest = async (username, passwd) => {
+export const loginRequest = (username, passwd) => {
   return post('/login', {username, passwd})
 }
 
-export const registerRequest = async (username, email, passwd) => {
+export const registerRequest = (username, email, passwd) => {
   return post('/register', {username, email, passwd})
 }
 
-export const getNotesByUserId = async (uid) => {
+export const getNotesByUserId = (uid) => {
   return get('/notes/uid', {uid})
 }
 
-export const getNotesByTagId = async (tid) => {
-  return get('/notes/tid', {tid})
+export const getNotesByTagId = (uid, tid) => {
+  return get('/notes/uid/tid', {uid, tid})
 }
 
-export const getNote = async (nid) => {
+export const getNote = (nid) => {
   return get('/note', {nid})
 }
 
-export const getNoteHeads = async (uid) => {
+export const getNoteHeads = (uid) => {
   return get('/heads', {uid})
 }
 
-export const getUser = async (uid) => {
+export const getUser = (uid) => {
   return get('/user', {uid})
 }
 
-export const postNote = async (newNote) => {
+export const postNote = (newNote) => {
   return post('/note', {...newNote})
 }
 
-export const putNote = async (newNote) => {
+export const putNote = (newNote) => {
   return put('/note', newNote);
+}
+
+export const deleteNote = (nid) => {
+  return del('/note', nid);
 }

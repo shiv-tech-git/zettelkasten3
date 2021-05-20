@@ -6,7 +6,9 @@ const NoteSchema = mongoose.Schema({
   title: String,
   body: String,
   links: Array,
-  tags: Array
+  tags: Array,
+  create: Date,
+  update: Date,
 });
 
 module.exports = mongoose.model('notes', NoteSchema)

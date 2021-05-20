@@ -21,7 +21,6 @@ const UserNotes = ({match}) => {
 
   useEffect(async () => {
     const responce = await getNotesByUserId(match.params.uid);
-    console.log(responce)
     dispatch(addNotes(responce.notes));
     setNotes(responce.notes);
     if (userId === match.params.uid) setTitle('My notes')
@@ -29,7 +28,6 @@ const UserNotes = ({match}) => {
   }, [])
   
   if (notes.length === 0) return <></>;
-  console.log(notes)
   return (
     <NoteList
       title={title}

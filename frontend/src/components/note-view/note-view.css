@@ -25,12 +25,18 @@
   font-size: 1.5rem;
 }
 
-.note_view .edit_button {
+.btn_block {
+  display: flex;
+}
+
+.note_view .button {
   font-size: 2rem;
   padding: 0 20px;
   border: 1px solid black;
+  margin: 0 5px;
 }
 
-.note_view .edit_button:hover {
+.note_view .button:hover {
   background-color: #A66D00;
+  cursor: pointer;
 }

@@ -39,24 +39,56 @@ const filterNewLinks = (note) => {
   note.links.forEach((link) => {
     if (link.status && link.status === 'new') {
       newLinkIds.push(link._id);
-      delete link.status
     }
   })
-
   return newLinkIds;
 }
 
-const handleNewLinks = (newLinkIds, newNote) => {
+const filterDeletedLinks = (note) => {
+  const deletedLinksId = [];
+
+  note.links = note.links.filter( link => {
+    if (link.status === "deleted") {
+      deletedLinksId.push(link._id)
+      return false;
+    }
+    return true;
+  })
+  return deletedLinksId;
+}
+
+const removeLinksStatus = (note) => {
+  note.links.forEach( link => {
+    delete link.status;
+  })
+}
+
+const handleNewLinks = (newLinkIds, createdNote) => {
   newLinkIds.forEach( async (linkId) => {
     const note = await NoteModel.findOne({_id: linkId});
     note.links.push({
-      title: newNote.title,
-      _id: newNote._id
+      title: createdNote.title,
+      _id: createdNote._id
     });
     note.save();
   })
 }
 
+const handleDeletedLinks = (deletedLinksId, updatedNoteId) => {
+  deletedLinksId.forEach( async (linkId) => {
+    const note = await NoteModel.findOne({_id: linkId});
+    const links = note.links.filter( link => {
+      if (link._id == updatedNoteId) {
+        return false;
+      }
+      return true;
+    })
+    note.links = links;
+    note.save();
+  })
+}
+
+//CREATE
 router.post('/', async (req, res) => {
 
   const note = req.body;
@@ -68,6 +100,8 @@ router.post('/', async (req, res) => {
 
   const newNote = new NoteModel({
     uid,
+    create: new Date(),
+    update: new Date(),
     ...note
   })
   const createdNote = await newNote.save();
@@ -77,6 +111,7 @@ router.post('/', async (req, res) => {
   res.json({_id: createdNote._id})
 })
 
+//UPDATE
 router.put('/', async (req, res) => {
 
   const note = req.body;
@@ -85,23 +120,34 @@ router.put('/', async (req, res) => {
   handleNewTags(note, uid);
 
   const newLinkIds = filterNewLinks(note);
+  const deletedLinksIds = filterDeletedLinks(note);
+  removeLinksStatus(note);
 
-  const updating_note = await NoteModel.findOne({_id: note._id})
-  updating_note.title = note.title;
-  updating_note.tags = note.tags;
-  updating_note.links = note.links;
-  updating_note.body = note.body;
-  const updated_note = await updating_note.save();
+  const updatingNote = await NoteModel.findOne({_id: note._id})
+  updatingNote.title = note.title;
+  updatingNote.tags = note.tags;
+  updatingNote.links = note.links;
+  updatingNote.body = note.body;
+  updatingNote.update = new Date();
+  const updatedNote = await updatingNote.save();
 
-  handleNewLinks(newLinkIds, updated_note);
+  handleNewLinks(newLinkIds, updatedNote);
+  handleDeletedLinks(deletedLinksIds, updatedNote._id);
 
-  res.json({_id: updated_note._id})
+  res.json({_id: updatedNote._id})
 })
 
+//GET
 router.get('/', async (req, res) => {
   const note_id = req.query.nid;
   const note = await NoteModel.findOne({_id: note_id});
   res.json(note);
+})
+
+//DELETE 
+router.delete('/', async (req, res) => {
+  await NoteModel.deleteOne({_id: req.body.nid})
+  res.json({status: 'ok', message: 'note has been deleted'});
 })
 
 

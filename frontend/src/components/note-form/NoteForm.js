@@ -9,15 +9,14 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const NoteForm = ({note, formMode, submitCallback}) => {
-  const [title, setTitle] = useState(note ? note.title : '');
-  const [body, setBody] = useState(note ? note.body : '');
-  const [tags, setTags] = useState(note ? note.tags : []);
-  const [links, setLinks] = useState(note ? note.links : []);
+
+  const [title, setTitle] = useState(note?.title ? note.title : '');
+  const [body, setBody] = useState(note?.body ? note.body : '');
+  const [tags, setTags] = useState(note?.tags ? note.tags : []);
+  const [links, setLinks] = useState(note?.links ? note.links : []);
   const [allTitles, setAllTitles] = useState([]);
   const [allTags, setAllTags] = useState([]);
   const myId = useSelector(state => state.auth.userData.userId)
-
-
 
   const deleteTag = (tagId) => {
     setTags(tags.filter((tag) => {
@@ -26,9 +25,21 @@ const NoteForm = ({note, formMode, submitCallback}) => {
   }
 
   const deleteLink = (linkId) => {
-    console.log(linkId);
+
+    const linksLength = links.length;
+    for (let i = 0; i < linksLength; i++) {
+      if (links[i].status === 'old' && links[i]._id === linkId) {
+        links[i].status = 'deleted'
+        setLinks([...links]);
+        return;
+      }
+    }
+
     setLinks(links.filter((link) => {
-      return link._id !== linkId;
+      if (link?.status === 'new') {
+        return link._id !== linkId;
+      }
+      return true;
     }))
   }
 
@@ -40,18 +51,27 @@ const NoteForm = ({note, formMode, submitCallback}) => {
         _id: head._id
       }
     });
-    setAllTitles(titles)
+    return titles;
   }
 
   const addNewLink = (item) => {
+    const linksLength = links.length;
+    for (let i = 0; i < linksLength; i++) {
+      if (links[i].status === 'deleted' && links[i]._id === item._id) {
+        links[i].status = 'old';
+        setLinks([...links])
+        return;
+      }
+    }
+
     setLinks(links => [...links, {_id: item._id, title: item.label, status: 'new'}]);
   };
-
+  
   const loadTags = async () => {
     const userData = await getUser(myId);
-    setAllTags(userData.tags);
+    return userData.tags;
   }
-
+  
   const addNewTag = (item) => {
     if (item._id === 'new') {
       const tagsLength = tags.length;
@@ -62,29 +82,36 @@ const NoteForm = ({note, formMode, submitCallback}) => {
       return;
     }
     setTags(tag => [...tag, {_id: item._id, name: item.label}]);
-    console.log('set tag', tags)
   };
   
-  useEffect(() => {
-    loadTitles();
-    loadTags();
-  }, [])
-
-  const filterAutocompleteList = (autocomplete_list, selected_list) => {
-    return autocomplete_list.filter((autocomplete_item) => {
-      let leave_element = true;
-
-      const selected_list_length = selected_list.length;
-      for (let i = 0; i < selected_list_length; i++) {
-        if (autocomplete_item._id == selected_list[i]._id) {
-          leave_element = false;
-          break;
+  
+  const filterAutocompleteList = (autocompleteList, selectedList) => {
+    const filtered = [];
+    
+    autocompleteList.forEach( acItem => {
+      
+      const selectedLength = selectedList.length;
+      
+      for (let i = 0; i < selectedLength; i++) {
+        //if old link was deleted but persists invisibly keep link in suggests
+        if (selectedList[i]?.status === 'deleted' && acItem._id === selectedList[i]._id) {
+          filtered.push(acItem);
+          return;
+        }
+        //filter if item has been choosed already
+        if (autocompleteList[i]._id === acItem._id) {
+          return;
         }
       }
-      return leave_element;
+      //filter link if edit same note
+      if (acItem._id == note?._id) {
+        return;
+      }
+      filtered.push(acItem);
     })
+    return filtered;
   }
-
+  
   const submitHandler = async (e) => {
     e.preventDefault();
     tags.forEach(tag => {
@@ -98,6 +125,13 @@ const NoteForm = ({note, formMode, submitCallback}) => {
     }
     submitCallback(note);
   }
+  
+  useEffect(async () => {
+    const [titles, tags] = await Promise.all([loadTitles(), loadTags()])
+    setAllTitles(titles);
+    setAllTags(tags);
+  }, [])
+
   return (
     <div className="note_form_wrapper">
       <div className="note_form">
@@ -111,7 +145,6 @@ const NoteForm = ({note, formMode, submitCallback}) => {
           <div className="link_items_wrapper">
             <label htmlFor="tags">Tags:</label>
               {tags.map((tag, index) => {
-                
                 return <LinkItem 
                   key={"tag_" + index}
                   itemId={tag._id}
@@ -132,6 +165,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
           <div className="link_items_wrapper">
             <label htmlFor="links">Links:</label>
               {links.map((note, index) => {
+                if (note.status === 'deleted') return '';
                 return <LinkItem 
                   key={"link_" + index}
                   itemId={note._id}

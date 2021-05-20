@@ -1,0 +1,12 @@
+.user_tags_wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  width: 400px;
+  margin: auto;
+}
+
+.user_tags_wrapper a {
+  padding: 5px 0;
+}

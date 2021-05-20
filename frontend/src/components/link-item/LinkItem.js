@@ -2,20 +2,8 @@ import './link-item.css';
 
 import { Link } from 'react-router-dom';
 
-const LinkItem = ({ itemId, name, edit=false, type, button_callback }) => {
-  
-  let link = '';
-  switch(type) {
-    case 'tag':
-      link = `/notes/tag/${itemId}`
-      break;
-    case 'note':
-      link = `/note/view/${itemId}`
-      break;
-    default:
-      break;
-  }
-  
+const LinkItem = ({ link, itemId, name, edit=false, button_callback }) => {
+
   if (edit) {
     return (
       <div className="link_item_wrapper">

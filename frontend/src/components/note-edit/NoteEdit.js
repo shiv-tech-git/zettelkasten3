@@ -8,10 +8,13 @@ import { useSelector } from 'react-redux';
 import { getNote, putNote } from '../../utils/request';
 
 const NoteEdit = ({ match, history}) => {
-  const [note, setNote] = useState(useSelector(state => state.notes[match.params.nid]));
+  const [note, setNote] = useState({});
 
   const loadNote = async (nid) => {
     const note = await getNote(nid)
+    note.links.forEach((link) => {
+      link.status = "old"
+    })
     setNote(note);
   }
 

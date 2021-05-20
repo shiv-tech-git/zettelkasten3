@@ -47,7 +47,7 @@ function App() {
           <div className="content">
             <Switch>
               <Route path='/notes/user/:uid' exact component={UserNotes} />
-              <Route path='/notes/tag/:tid' exact component={TagNotes} />
+              <Route path='/notes/user/:uid/tag/:tid' exact component={TagNotes} />
               <Route path='/note/create' component={NoteCreate} />
               <Route path='/note/view/:nid' component={NoteView} />
               <Route path='/note/edit/:nid' component={NoteEdit} />
