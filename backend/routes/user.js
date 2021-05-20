@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const UserModel = require('../models/user');
+const mongoose = require('mongoose');
 
 router.get('/', async (req, res) => {
-  const userId = req.query.uid;
-  const user = await UserModel.findOne({_id: userId}, 'username, tags');
+  const uid = req.query.uid;
+  const user = await UserModel.findOne({_id: mongoose.Types.ObjectId(uid)}, 'username, tags');
   res.json(user);
 })
 

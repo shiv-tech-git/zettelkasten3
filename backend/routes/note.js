@@ -2,25 +2,27 @@ const NoteModel = require('../models/note');
 const UserModel = require('../models/user');
 const router = require('express').Router();
 const mongoose = require('mongoose');
-const { rawListeners } = require('../models/note');
 
 const setIdtoNewTags = (note) => {
   const newTags = [];
 
   note.tags.forEach(async (tag) => {
     if (tag._id === 'new') {
-      tag._id = new mongoose.Types.ObjectId()
+      tag._id = new mongoose.Types.ObjectId();
       newTags.push(tag);
+      return;
     }
-  })
+    tag._id = mongoose.Types.ObjectId(tag._id);
 
+  })
+  const test = 1;
   return newTags;
 }
 
 const addTagsToUser = async (tags, uid) => {
-  const user = await UserModel.findOne({_id: uid})
+  const user = await UserModel.findOne({_id: mongoose.Types.ObjectId(uid)})
   tags.forEach((tag) => {
-    user.tags.push({_id: tag._id, name: tag.name})
+    user.tags.push({_id: mongoose.Types.ObjectId(tag._id), name: tag.name})
   })
   await user.save();
 }
@@ -28,7 +30,7 @@ const addTagsToUser = async (tags, uid) => {
 const handleNewTags = (note, uid) => {
   const newTags = setIdtoNewTags(note);
 
-  if (newTags !== 0) {
+  if (newTags.length > 0) {
     addTagsToUser(newTags, uid);
   }
 }
@@ -63,12 +65,16 @@ const removeLinksStatus = (note) => {
   })
 }
 
+const convertLinksId = (note) => {
+  note.links.forEach( link => link._id = mongoose.Types.ObjectId(link._id) )
+}
+
 const handleNewLinks = (newLinkIds, createdNote) => {
   newLinkIds.forEach( async (linkId) => {
-    const note = await NoteModel.findOne({_id: linkId});
+    const note = await NoteModel.findOne({_id: mongoose.Types.ObjectId(linkId)});
     note.links.push({
       title: createdNote.title,
-      _id: createdNote._id
+      _id: mongoose.Types.ObjectId(createdNote._id)
     });
     note.save();
   })
@@ -76,7 +82,7 @@ const handleNewLinks = (newLinkIds, createdNote) => {
 
 const handleDeletedLinks = (deletedLinksId, updatedNoteId) => {
   deletedLinksId.forEach( async (linkId) => {
-    const note = await NoteModel.findOne({_id: linkId});
+    const note = await NoteModel.findOne({_id: mongoose.Types.ObjectId(linkId)});
     const links = note.links.filter( link => {
       if (link._id == updatedNoteId) {
         return false;
@@ -97,9 +103,11 @@ router.post('/', async (req, res) => {
   handleNewTags(note, uid);
 
   const newLinkIds = filterNewLinks(note);
+  removeLinksStatus(note);
+  convertLinksId(note);
 
   const newNote = new NoteModel({
-    uid,
+    uid: mongoose.Types.ObjectId(uid),
     create: new Date(),
     update: new Date(),
     ...note
@@ -122,8 +130,9 @@ router.put('/', async (req, res) => {
   const newLinkIds = filterNewLinks(note);
   const deletedLinksIds = filterDeletedLinks(note);
   removeLinksStatus(note);
+  convertLinksId(note);
 
-  const updatingNote = await NoteModel.findOne({_id: note._id})
+  const updatingNote = await NoteModel.findOne({_id: mongoose.Types.ObjectId(note._id)})
   updatingNote.title = note.title;
   updatingNote.tags = note.tags;
   updatingNote.links = note.links;
@@ -140,13 +149,14 @@ router.put('/', async (req, res) => {
 //GET
 router.get('/', async (req, res) => {
   const note_id = req.query.nid;
-  const note = await NoteModel.findOne({_id: note_id});
+  const note = await NoteModel.findOne({_id: mongoose.Types.ObjectId(note_id)});
   res.json(note);
 })
 
 //DELETE 
 router.delete('/', async (req, res) => {
-  await NoteModel.deleteOne({_id: req.body.nid})
+  const nid = req.body.nid;
+  await NoteModel.deleteOne({_id: mongoose.Types.ObjectId(nid)})
   res.json({status: 'ok', message: 'note has been deleted'});
 })
 

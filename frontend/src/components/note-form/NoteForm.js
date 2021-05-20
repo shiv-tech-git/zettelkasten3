@@ -1,12 +1,12 @@
-import './note-form.css'
-
-import LinkItem from '../link-item/LinkItem';
-import SearchInput from '../search-input/SearchInput';
-
-import { getNoteHeads, getUser } from '../../utils/request';
-
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { getNoteHeads, getUser } from '../../utils/request';
+import LinkItem from '../link-item/LinkItem';
+import SearchInput from '../search-input/SearchInput';
+import './note-form.css';
+
+
+
 
 const NoteForm = ({note, formMode, submitCallback}) => {
 
@@ -86,6 +86,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
   
   
   const filterAutocompleteList = (autocompleteList, selectedList) => {
+    
     const filtered = [];
     
     autocompleteList.forEach( acItem => {
@@ -99,7 +100,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
           return;
         }
         //filter if item has been choosed already
-        if (autocompleteList[i]._id === acItem._id) {
+        if (selectedList[i]._id === acItem._id) {
           return;
         }
       }
@@ -109,6 +110,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
       }
       filtered.push(acItem);
     })
+    console.log(filtered)
     return filtered;
   }
   
@@ -123,6 +125,7 @@ const NoteForm = ({note, formMode, submitCallback}) => {
       tags,
       links
     }
+    // console.log(note)
     submitCallback(note);
   }
   
