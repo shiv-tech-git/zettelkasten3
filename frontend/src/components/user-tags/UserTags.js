@@ -15,7 +15,6 @@ const UserTags = ({ match }) => {
     const responce = await getUser(uid);
     setTags(responce.tags);
     setUsername(responce.username);
-    console.log("responce")
   }, [])
 
   if (!tags) return '';

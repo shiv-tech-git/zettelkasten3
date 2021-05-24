@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 router.get('/', async (req, res) => {
   const uid = req.query.uid;
-  const user = await UserModel.findOne({_id: mongoose.Types.ObjectId(uid)}, 'username, tags');
+  const user = await UserModel.findOne({_id: mongoose.Types.ObjectId(uid)}, 'username tags');
   res.json(user);
 })
 

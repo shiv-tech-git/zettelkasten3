@@ -1,0 +1,21 @@
+.user_info_wrapper {
+  width: 500px;
+  border: 1px solid black;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.user_info_wrapper .button_section {
+  display: flex;
+}
+
+.user_info_wrapper .button_section a {
+  border: 1px solid black;
+  margin: 5px;
+  line-height: 40px;
+  padding: 0 10px;
+}
+
+.user_info_wrapper .button_section a:hover {
+  background-color: white;
+}

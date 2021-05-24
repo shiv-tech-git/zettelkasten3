@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const UserModel = require('../models/user');
 
+const bcrypt = require('bcrypt');
+const { saltRounds } = require('../secure');
+
 router.post('/', async (req, res) => {
 
   let matched_user = await UserModel.findOne({username: req.body.username})
@@ -13,9 +16,9 @@ router.post('/', async (req, res) => {
     return;
   }
 
-  
-  matched_user = await UserModel.findOne({passwd: req.body.passwd})
-  if (matched_user && matched_user.passwd === req.body.passwd) {
+  matched_user = null;
+  matched_user = await UserModel.findOne({email: req.body.email})
+  if (matched_user && matched_user.email === req.body.email) {
     res.json({
       status: 'error', 
       message: `User with this email ${req.body.email} is already exists`
@@ -23,23 +26,26 @@ router.post('/', async (req, res) => {
     res.end()
     return;
   }
-
-  const new_user = new UserModel({
-    username: req.body.username,
-    email: req.body.email,
-    passwd: req.body.passwd,
-    tags: []
-  })
-
-  new_user.save((err, doc) => {
-    if (err) return console.error(err)
-  })
   
-  res.json({
-    status: 'success',
-    message: `You have successfully registered as ${req.body.username}`,
-  })
-  res.end()
+  bcrypt.hash(req.body.passwd, saltRounds, function(err, hashPass) {
+    const new_user = new UserModel({
+      username: req.body.username,
+      email: req.body.email,
+      passwd: hashPass,
+      tags: []
+    })
+  
+    new_user.save((err, doc) => {
+      if (err) return console.error(err)
+    })
+    
+    res.json({
+      status: 'success',
+      message: `You have successfully registered as ${req.body.username}`,
+    })
+    res.end()
+  });
+
 })
 
 module.exports = router;

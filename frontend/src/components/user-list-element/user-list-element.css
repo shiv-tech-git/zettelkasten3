@@ -1,0 +1,23 @@
+.user_list_el_wrapper {
+  border: 1px solid black;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.user_list_el_wrapper .user_account {
+  display: flex;
+  line-height: 40px;
+}
+
+.user_list_el_wrapper .user_account a {
+  border: 1px solid black;
+  line-height: 40px;
+  width: 300px;
+}
+
+.user_list_el_wrapper a {
+  border: 1px solid black;
+  line-height: 40px;
+  padding: 0 10px;
+}

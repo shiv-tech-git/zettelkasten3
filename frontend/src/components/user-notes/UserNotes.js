@@ -14,20 +14,28 @@ import { getNotesByUserId } from '../../utils/request';
 
 const UserNotes = ({match}) => {
   const [notes, setNotes] = useState([])
-  const [title, setTitle] = useState('')
-
-  const userId = useSelector(state => state.auth.userData.userId);
+  const [user, setUser] = useState(null)
+  const myId = match.params.uid;
+  const uid = useSelector(state => state.auth.userData.userId);
   const dispatch = useDispatch();
 
   useEffect(async () => {
     const responce = await getNotesByUserId(match.params.uid);
-    dispatch(addNotes(responce.notes));
     setNotes(responce.notes);
-    if (userId === match.params.uid) setTitle('My notes')
-    else setTitle(`${responce.user.username}`)
+    setUser(responce.user);
+    console.log(responce.user)
   }, [])
   
-  if (notes.length === 0) return <></>;
+  if (notes.length === 0 || !user) return '';
+
+  let title = '';
+  if (myId === uid) {
+    title = "My tags"
+  }
+  else {
+    title = `${user.username}'s notes`
+  }
+
   return (
     <NoteList
       title={title}

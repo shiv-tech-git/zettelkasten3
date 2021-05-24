@@ -15,6 +15,8 @@ import NoteEdit from './components/note-edit/NoteEdit';
 import UserTags from './components/user-tags/UserTags';
 import UserNotes from './components/user-notes/UserNotes';
 import TagNotes from './components/tag-notes/TagNotes';
+import Users from './components/users/Users';
+import User from './components/user/User';
 //COMPONENTS
 
 //ROUTER
@@ -52,6 +54,8 @@ function App() {
               <Route path='/note/view/:nid' component={NoteView} />
               <Route path='/note/edit/:nid' component={NoteEdit} />
               <Route path='/tags/user/:uid' component={UserTags} />
+              <Route path='/users/all' component={Users} />
+              <Route path='/user/:uid' component={User} />
             </Switch>
           </div>
         </div>

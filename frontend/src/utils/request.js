@@ -73,6 +73,10 @@ export const getUser = (uid) => {
   return get('/user', {uid})
 }
 
+export const getAllUsers = () => {
+  return get('/users', {})
+}
+
 export const postNote = (newNote) => {
   return post('/note', {...newNote})
 }
