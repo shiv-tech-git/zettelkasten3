@@ -14,7 +14,7 @@ const User = ({ match }) => {
     setUser(user);
   }, [])
 
-  if(!user) return '';
+  if(!user) return null;
 
   return (
     <div className="user_info_wrapper">

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getNoteHeads, getUser } from '../../utils/request';
 import LinkItem from '../link-item/LinkItem';
-import SearchInput from '../search-input/SearchInput';
+import SearchInput from '../search-input/__SearchInput';
 import './note-form.css';
 
 
@@ -110,7 +110,6 @@ const NoteForm = ({note, formMode, submitCallback}) => {
       }
       filtered.push(acItem);
     })
-    console.log(filtered)
     return filtered;
   }
   

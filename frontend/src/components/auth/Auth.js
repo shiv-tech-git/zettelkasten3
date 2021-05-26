@@ -12,6 +12,7 @@ import { loginRequest, registerRequest } from '../../utils/request';
 import { useDispatch } from 'react-redux';
 
 import { loginUser } from '../../redux/actions';
+import { useHistory } from 'react-router';
 //REDUX
 
 const Auth = () => {
@@ -23,7 +24,7 @@ const Auth = () => {
   const [formState, setFormState] = useState('login');
   const [btnLabel, setBtnLabel] = useState('Login');
   const [status, setStatus] = useState('');
-
+  const history = useHistory();
   //REDUX
   const dispatch = useDispatch();
 
@@ -63,6 +64,7 @@ const Auth = () => {
         if (response.status === 'success') {
           delete response.status;
           dispatch(loginUser({...response}));
+          history.push('/');
         } else if (response.status === 'error') {
           setStatus(response.message);
         }

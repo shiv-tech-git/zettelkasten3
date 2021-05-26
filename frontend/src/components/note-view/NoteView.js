@@ -9,6 +9,9 @@ import { getNote, deleteNote } from '../../utils/request';
 import LinkItem from '../link-item/LinkItem';
 
 const NoteView = ({ match }) => {
+
+  console.log('render');
+  
   const [note, setNote] = useState(null);
   const myid = useSelector(state => state.auth.userData.userId)
   const history = useHistory();
